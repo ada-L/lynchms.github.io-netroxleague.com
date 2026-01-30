@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Netrox League - discord Futbol Ligi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --secondary: #00D9FF;
+            --accent: #FF3366;
+            --dark: #0A0E27;
+            --dark-alt: #141829;
+            --dark-surface: #1E2139;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8B92B2;
+            --success: #00FF88;
+            --warning: #FFB800;
+            --border: #2A2F4F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-alt) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 51, 102, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        header {
+            background: rgba(30, 33, 57, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.4);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .logo-text h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 32px;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: -5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 102, 255, 0.5);
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, var(--accent), #FF1744);
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 51, 102, 0.3);
+        }
+
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 51, 102, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #00CC70);
+            color: var(--dark);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #FF1744, #C62828);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 12px;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: var(--dark-surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--dark-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 28px;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .week-badge {
+            background: linear-gradient(135deg, var(--accent), #FF1744);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+        }
+
+        .leaders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .leader-card {
+            background: linear-gradient(135deg, var(--dark-alt), var(--dark-surface));
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .leader-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .leader-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .leader-team {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .leader-name {
+            font-size: 16px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .matches-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .match-item {
+            background: linear-gradient(135deg, var(--dark-alt), var(--dark-surface));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .match-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .team.away {
+            flex-direction: row-reverse;
+            text-align: right;
+        }
+
+        .team-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.05);
+            padding: 5px;
+        }
+
+        .team-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .score {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        thead th {
+            background: var(--dark-alt);
+            color: var(--text-secondary);
+            padding: 1rem;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            border: none;
+        }
+
+        tbody tr {
+            background: var(--dark-surface);
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, var(--dark-surface), var(--dark-alt));
+            transform: translateX(5px);
+        }
+
+        tbody td {
+            padding: 1.2rem 1rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody td:first-child {
+            border-left: 1px solid var(--border);
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        tbody td:last-child {
+            border-right: 1px solid var(--border);
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .team-name-cell {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .player-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .news-card {
+            background: var(--dark-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .news-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .news-excerpt {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .news-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .news-card:hover .news-actions {
+            opacity: 1;
+        }
+
+        .transfer-item {
+            background: linear-gradient(135deg, var(--dark-alt), var(--dark-surface));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr 1fr auto;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .transfer-item:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .transfer-player {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .transfer-arrow {
+            text-align: center;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .transfer-fee {
+            text-align: right;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark-surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+            margin: 2rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            background: #FF1744;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--dark-alt);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.2);
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .admin-card {
+            background: linear-gradient(135deg, var(--dark-alt), var(--dark-surface));
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .admin-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 102, 255, 0.3);
+        }
+
+        .admin-icon {
+            font-size: 48px;
+            margin-bottom: 1rem;
+        }
+
+        .admin-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .fixture-item {
+            background: linear-gradient(135deg, var(--dark-alt), var(--dark-surface));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .fixture-item:hover {
+            border-color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        .vs-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 2px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .list-item {
+            background: linear-gradient(135deg, var(--dark-alt), var(--dark-surface));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .list-item-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .match-item, .fixture-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .team.away {
+                flex-direction: row;
+                text-align: left;
+            }
+
+            .transfer-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .transfer-arrow {
+                transform: rotate(90deg);
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, var(--success), #00CC70);
+            color: var(--dark);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-align: center;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">NL</div>
+                <div class="logo-text">
+                    <h1>NETROX LEAGUE</h1>
+                    <p>Season 2025/26 • v1.1</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="showTab('fixture')">Fikstür</button>
+                <button class="btn btn-admin" onclick="showAdminModal()">Admin Girişi</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('home')">Ana Sayfa</div>
+            <div class="tab" onclick="showTab('standings')">Puan Durumu</div>
+            <div class="tab" onclick="showTab('scorers')">Gol Krallığı</div>
+            <div class="tab" onclick="showTab('assists')">Asist Krallığı</div>
+            <div class="tab" onclick="showTab('fixture')">Fikstür</div>
+            <div class="tab" onclick="showTab('news')">Haberler</div>
+            <div class="tab" onclick="showTab('transfers')">Transferler</div>
+        </div>
+
+        <!-- Ana Sayfa -->
+        <div id="home" class="section active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Lider ve Krallıklar</h2>
+                    <span class="week-badge">Sezon 2025/26</span>
+                </div>
+                <div class="leaders-grid" id="leadersGrid"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Son Oynanan Maçlar</h2>
+                </div>
+                <div class="matches-list" id="recentMatches"></div>
+            </div>
+        </div>
+
+        <!-- Puan Durumu -->
+        <div id="standings" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Puan Durumu</h2>
+                    <span class="week-badge">Sezon 2025/26</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>SIRA</th>
+                                <th>TAKIM</th>
+                                <th>O</th>
+                                <th>G</th>
+                                <th>B</th>
+                                <th>M</th>
+                                <th>AG</th>
+                                <th>YG</th>
+                                <th>AV</th>
+                                <th>PUAN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standingsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gol Krallığı -->
+        <div id="scorers" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Gol Krallığı</h2>
+                    <span class="week-badge">Sezon 2025/26</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>SIRA</th>
+                                <th>OYUNCU</th>
+                                <th>TAKIM</th>
+                                <th>GOL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scorersTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Asist Krallığı -->
+        <div id="assists" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Asist Krallığı</h2>
+                    <span class="week-badge">Sezon 2025/26</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>SIRA</th>
+                                <th>OYUNCU</th>
+                                <th>TAKIM</th>
+                                <th>ASİST</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assistsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fikstür -->
+        <div id="fixture" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Gelecek Maçlar</h2>
+                    <span class="week-badge">Fikstür</span>
+                </div>
+                <div class="matches-list" id="fixtureList"></div>
+            </div>
+        </div>
+
+        <!-- Haberler -->
+        <div id="news" class="section">
+            <div class="news-grid" id="newsGrid"></div>
+        </div>
+
+        <!-- Transferler -->
+        <div id="transfers" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Son Transfer Haberleri</h2>
+                    <span class="week-badge">Transfer Dönemi</span>
+                </div>
+                <div id="transfersList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAdminModal()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Admin Girişi</h2>
+            <form onsubmit="adminLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Kullanıcı Adı</label>
+                    <input type="text" class="form-input" id="adminUsername" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Şifre</label>
+                    <input type="password" class="form-input" id="adminPassword" required>
+                </div>
+                <button type="submit" class="btn btn-admin" style="width: 100%;">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminPanelModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <button class="modal-close" onclick="closeAdminPanel()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Admin Paneli</h2>
+            <div class="admin-grid">
+                <div class="admin-card" onclick="openTeamManager()">
+                    <div class="admin-icon">🏆</div>
+                    <div class="admin-title">Takımlar</div>
+                    <div class="admin-desc">Takım ekle/sil/düzenle</div>
+                </div>
+                <div class="admin-card" onclick="openPlayerManager()">
+                    <div class="admin-icon">👤</div>
+                    <div class="admin-title">Oyuncular</div>
+                    <div class="admin-desc">Oyuncu ekle/sil/düzenle</div>
+                </div>
+                <div class="admin-card" onclick="openMatchManager()">
+                    <div class="admin-icon">⚽</div>
+                    <div class="admin-title">Maç Sonuçları</div>
+                    <div class="admin-desc">Yeni maç sonuçları ekle</div>
+                </div>
+                <div class="admin-card" onclick="openFixtureManager()">
+                    <div class="admin-icon">📅</div>
+                    <div class="admin-title">Fikstür</div>
+                    <div class="admin-desc">Maç programını düzenle</div>
+                </div>
+                <div class="admin-card" onclick="openNewsManager()">
+                    <div class="admin-icon">📰</div>
+                    <div class="admin-title">Haberler</div>
+                    <div class="admin-desc">Yeni haberler yayınla</div>
+                </div>
+                <div class="admin-card" onclick="openTransferManager()">
+                    <div class="admin-icon">🔄</div>
+                    <div class="admin-title">Transferler</div>
+                    <div class="admin-desc">Transfer haberlerini yönet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Manager Modal -->
+    <div id="teamManagerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTeamManager()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Takım Yönetimi</h2>
+            
+            <form onsubmit="addTeam(event)" style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
+                <div class="form-group">
+                    <label class="form-label">Takım Adı</label>
+                    <input type="text" class="form-input" id="teamName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Logo URL</label>
+                    <input type="url" class="form-input" id="teamLogo" placeholder="https://example.com/logo.png" required>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Takım Ekle</button>
+            </form>
+
+            <div id="teamsList"></div>
+        </div>
+    </div>
+
+    <!-- Player Manager Modal -->
+    <div id="playerManagerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePlayerManager()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Oyuncu Yönetimi</h2>
+            
+            <form onsubmit="addPlayer(event)" style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
+                <div class="form-group">
+                    <label class="form-label">Oyuncu Adı</label>
+                    <input type="text" class="form-input" id="playerName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Fotoğraf URL</label>
+                    <input type="url" class="form-input" id="playerImage" placeholder="https://example.com/player.jpg" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Takım</label>
+                    <select class="form-select" id="playerTeam" required></select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Gol Sayısı</label>
+                        <input type="number" class="form-input" id="playerGoals" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Asist Sayısı</label>
+                        <input type="number" class="form-input" id="playerAssists" min="0" value="0">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Oyuncu Ekle</button>
+            </form>
+
+            <div id="playersList"></div>
+        </div>
+    </div>
+
+    <!-- Match Manager Modal -->
+    <div id="matchManagerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeMatchManager()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Maç Ekle</h2>
+            <form onsubmit="addMatch(event)">
+                <div class="form-group">
+                    <label class="form-label">Ev Sahibi Takım</label>
+                    <select class="form-select" id="matchHomeTeam" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deplasman Takımı</label>
+                    <select class="form-select" id="matchAwayTeam" required></select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Ev Sahibi Skor</label>
+                        <input type="number" class="form-input" id="matchHomeScore" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Deplasman Skor</label>
+                        <input type="number" class="form-input" id="matchAwayScore" min="0" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Maç Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- News Manager Modal -->
+    <div id="newsManagerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeNewsManager()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Haber Ekle</h2>
+            <form onsubmit="addNews(event)">
+                <div class="form-group">
+                    <label class="form-label">Başlık</label>
+                    <input type="text" class="form-input" id="newsTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">İçerik</label>
+                    <textarea class="form-textarea" id="newsContent" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Emoji İkon</label>
+                    <input type="text" class="form-input" id="newsIcon" placeholder="📰" maxlength="2">
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Haber Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transfer Manager Modal -->
+    <div id="transferManagerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTransferManager()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Transfer Ekle</h2>
+            <form onsubmit="addTransfer(event)">
+                <div class="form-group">
+                    <label class="form-label">Oyuncu Adı</label>
+                    <input type="text" class="form-input" id="transferPlayer" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Yeni Takım</label>
+                    <select class="form-select" id="transferTeam" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Transfer Ücreti</label>
+                    <input type="text" class="form-input" id="transferFee" placeholder="€50M" required>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Transfer Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fixture Manager Modal -->
+    <div id="fixtureManagerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeFixtureManager()">×</button>
+            <h2 class="card-title" style="margin-bottom: 2rem; text-align: center;">Fikstür Ekle</h2>
+            <form onsubmit="addFixture(event)">
+                <div class="form-group">
+                    <label class="form-label">Ev Sahibi Takım</label>
+                    <select class="form-select" id="fixtureHomeTeam" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deplasman Takımı</label>
+                    <select class="form-select" id="fixtureAwayTeam" required></select>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Fikstür Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let data = {
+            teams: [],
+            players: [],
+            matches: [],
+            fixtures: [],
+            news: [],
+            transfers: []
+        };
+
+        // Admin Authentication
+        let isAdminLoggedIn = false;
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('netroxLeagueData', JSON.stringify(data));
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('netroxLeagueData');
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        // Check admin authentication
+        function requireAdmin() {
+            if (!isAdminLoggedIn) {
+                alert('Bu işlem için admin girişi yapmalısınız!');
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize
+        loadData();
+        renderAll();
+
+        function renderAll() {
+            renderLeaders();
+            renderRecentMatches();
+            renderStandings();
+            renderScorers();
+            renderAssists();
+            renderFixtures();
+            renderNews();
+            renderTransfers();
+        }
+
+        // Get team logo
+        function getTeamLogo(teamName) {
+            const team = data.teams.find(t => t.name === teamName);
+            return team ? team.logo : '';
+        }
+
+        // Get player image
+        function getPlayerImage(playerName) {
+            const player = data.players.find(p => p.name === playerName);
+            return player ? player.image : '';
+        }
+
+        // Render Leaders
+        function renderLeaders() {
+            if (data.teams.length === 0) {
+                document.getElementById('leadersGrid').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏆</div><p>Henüz takım eklenmemiş</p></div>';
+                return;
+            }
+
+            const sorted = [...data.teams].sort((a, b) => b.points - a.points);
+            const topScorer = data.players.length > 0 ? [...data.players].sort((a, b) => b.goals - a.goals)[0] : null;
+            const topAssister = data.players.length > 0 ? [...data.players].sort((a, b) => b.assists - a.assists)[0] : null;
+            
+            let html = `
+                <div class="leader-card">
+                    <div class="leader-label">Lider</div>
+                    <div class="leader-team">${sorted[0].name}</div>
+                    <div class="leader-name">${sorted[0].points} Puan</div>
+                </div>
+            `;
+
+            if (topScorer) {
+                html += `
+                    <div class="leader-card">
+                        <div class="leader-label">Gol Kralı</div>
+                        <div class="leader-team">${topScorer.team}</div>
+                        <div class="leader-name">${topScorer.name} (${topScorer.goals})</div>
+                    </div>
+                `;
+            }
+
+            if (topAssister) {
+                html += `
+                    <div class="leader-card">
+                        <div class="leader-label">Asist Kralı</div>
+                        <div class="leader-team">${topAssister.team}</div>
+                        <div class="leader-name">${topAssister.name} (${topAssister.assists})</div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="leader-card">
+                    <div class="leader-label">En Az Yiyen Takım</div>
+                    <div class="leader-team">${sorted[0].name}</div>
+                    <div class="leader-name">${sorted[0].ga} Gol</div>
+                </div>
+            `;
+
+            document.getElementById('leadersGrid').innerHTML = html;
+        }
+
+        // Render Recent Matches
+        function renderRecentMatches() {
+            if (data.matches.length === 0) {
+                document.getElementById('recentMatches').innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚽</div><p>Henüz maç eklenmemiş</p></div>';
+                return;
+            }
+
+            const html = data.matches.slice(0, 6).map(m => `
+                <div class="match-item">
+                    <div class="team">
+                        <img src="${getTeamLogo(m.home)}" class="team-logo" onerror="this.style.display='none'" alt="${m.home}">
+                        <span class="team-name">${m.home}</span>
+                    </div>
+                    <div class="score">${m.homeScore}-${m.awayScore}</div>
+                    <div class="team away">
+                        <span class="team-name">${m.away}</span>
+                        <img src="${getTeamLogo(m.away)}" class="team-logo" onerror="this.style.display='none'" alt="${m.away}">
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('recentMatches').innerHTML = html;
+        }
+
+        // Render Standings
+        function renderStandings() {
+            if (data.teams.length === 0) {
+                document.getElementById('standingsTable').innerHTML = '<tr><td colspan="10" style="text-align: center; color: var(--text-secondary);">Henüz takım eklenmemiş</td></tr>';
+                return;
+            }
+
+            const sorted = [...data.teams].sort((a, b) => b.points - a.points || b.gd - a.gd);
+            const html = sorted.map((team, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>
+                        <div class="team-name-cell">
+                            <img src="${team.logo}" class="team-logo" onerror="this.style.display='none'" alt="${team.name}">
+                            <span>${team.name}</span>
+                        </div>
+                    </td>
+                    <td>${team.played}</td>
+                    <td>${team.won}</td>
+                    <td>${team.drawn}</td>
+                    <td>${team.lost}</td>
+                    <td>${team.gf}</td>
+                    <td>${team.ga}</td>
+                    <td>${team.gd > 0 ? '+' : ''}${team.gd}</td>
+                    <td>${team.points}</td>
+                </tr>
+            `).join('');
+            document.getElementById('standingsTable').innerHTML = html;
+        }
+
+        // Render Scorers
+        function renderScorers() {
+            if (data.players.length === 0) {
+                document.getElementById('scorersTable').innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-secondary);">Henüz oyuncu eklenmemiş</td></tr>';
+                return;
+            }
+
+            const sorted = [...data.players].sort((a, b) => b.goals - a.goals);
+            const html = sorted.map((player, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>
+                        <div class="team-name-cell">
+                            <img src="${player.image}" class="player-image" onerror="this.style.display='none'" alt="${player.name}">
+                            <span>${player.name}</span>
+                        </div>
+                    </td>
+                    <td>${player.team}</td>
+                    <td>${player.goals}</td>
+                </tr>
+            `).join('');
+            document.getElementById('scorersTable').innerHTML = html;
+        }
+
+        // Render Assists
+        function renderAssists() {
+            if (data.players.length === 0) {
+                document.getElementById('assistsTable').innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-secondary);">Henüz oyuncu eklenmemiş</td></tr>';
+                return;
+            }
+
+            const sorted = [...data.players].sort((a, b) => b.assists - a.assists);
+            const html = sorted.map((player, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>
+                        <div class="team-name-cell">
+                            <img src="${player.image}" class="player-image" onerror="this.style.display='none'" alt="${player.name}">
+                            <span>${player.name}</span>
+                        </div>
+                    </td>
+                    <td>${player.team}</td>
+                    <td>${player.assists}</td>
+                </tr>
+            `).join('');
+            document.getElementById('assistsTable').innerHTML = html;
+        }
+
+        // Render Fixtures
+        function renderFixtures() {
+            if (data.fixtures.length === 0) {
+                document.getElementById('fixtureList').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📅</div><p>Henüz fikstür eklenmemiş</p></div>';
+                return;
+            }
+
+            const html = data.fixtures.map((f, i) => `
+                <div class="fixture-item">
+                    <div class="team">
+                        <img src="${getTeamLogo(f.home)}" class="team-logo" onerror="this.style.display='none'" alt="${f.home}">
+                        <span class="team-name">${f.home}</span>
+                    </div>
+                    <div class="vs-text">VS</div>
+                    <div class="team away">
+                        <span class="team-name">${f.away}</span>
+                        <img src="${getTeamLogo(f.away)}" class="team-logo" onerror="this.style.display='none'" alt="${f.away}">
+                    </div>
+                    ${isAdminLoggedIn ? `<div class="action-buttons">
+                        <button class="btn btn-danger btn-small" onclick="deleteFixture(${i})">Sil</button>
+                    </div>` : '<div></div>'}
+                </div>
+            `).join('');
+            document.getElementById('fixtureList').innerHTML = html;
+        }
+
+        // Render News
+        function renderNews() {
+            if (data.news.length === 0) {
+                document.getElementById('newsGrid').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📰</div><p>Henüz haber eklenmemiş</p></div>';
+                return;
+            }
+
+            const html = data.news.map((n, i) => `
+                <div class="news-card">
+                    <div class="news-image">${n.icon || '📰'}</div>
+                    <div class="news-content">
+                        <div class="news-date">${n.date}</div>
+                        <div class="news-title">${n.title}</div>
+                        <div class="news-excerpt">${n.content}</div>
+                    </div>
+                    ${isAdminLoggedIn ? `<div class="news-actions">
+                        <button class="btn btn-danger btn-small" onclick="deleteNews(${i})">Sil</button>
+                    </div>` : ''}
+                </div>
+            `).join('');
+            document.getElementById('newsGrid').innerHTML = html;
+        }
+
+        // Render Transfers
+        function renderTransfers() {
+            if (data.transfers.length === 0) {
+                document.getElementById('transfersList').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔄</div><p>Henüz transfer eklenmemiş</p></div>';
+                return;
+            }
+
+            const html = data.transfers.map((t, i) => `
+                <div class="transfer-item">
+                    <div class="transfer-player">${t.player}</div>
+                    <div class="transfer-arrow">→</div>
+                    <div class="transfer-player">${t.team}</div>
+                    <div class="transfer-fee">${t.fee}</div>
+                    ${isAdminLoggedIn ? `<div class="action-buttons">
+                        <button class="btn btn-danger btn-small" onclick="deleteTransfer(${i})">Sil</button>
+                    </div>` : '<div></div>'}
+                </div>
+            `).join('');
+            document.getElementById('transfersList').innerHTML = html;
+        }
+
+        // Tab Navigation
+        function showTab(tabName) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Admin Functions
+        function showAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function adminLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            if (username === 'admin' && password === 'netrox2026') {
+                isAdminLoggedIn = true;
+                closeAdminModal();
+                document.getElementById('adminPanelModal').classList.add('active');
+                document.getElementById('adminUsername').value = '';
+                document.getElementById('adminPassword').value = '';
+            } else {
+                alert('Hatalı kullanıcı adı veya şifre!');
+            }
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanelModal').classList.remove('active');
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            alert('Çıkış yapıldı!');
+        }
+
+        // Team Manager
+        function openTeamManager() {
+            if (!requireAdmin()) return;
+            renderTeamsList();
+            document.getElementById('teamManagerModal').classList.add('active');
+        }
+
+        function closeTeamManager() {
+            document.getElementById('teamManagerModal').classList.remove('active');
+        }
+
+        function renderTeamsList() {
+            const html = data.teams.map((team, i) => `
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <img src="${team.logo}" class="team-logo" onerror="this.style.display='none'" alt="${team.name}">
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary);">${team.name}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">${team.points} Puan • ${team.played} Maç</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="deleteTeam(${i})">Sil</button>
+                </div>
+            `).join('');
+            document.getElementById('teamsList').innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">🏆</div><p>Henüz takım eklenmemiş</p></div>';
+        }
+
+        function addTeam(event) {
+            event.preventDefault();
+            if (!requireAdmin()) return;
+            const team = {
+                name: document.getElementById('teamName').value,
+                logo: document.getElementById('teamLogo').value,
+                played: 0,
+                won: 0,
+                drawn: 0,
+                lost: 0,
+                gf: 0,
+                ga: 0,
+                gd: 0,
+                points: 0
+            };
+            
+            data.teams.push(team);
+            saveData();
+            renderAll();
+            renderTeamsList();
+            event.target.reset();
+            alert('Takım başarıyla eklendi!');
+        }
+
+        function deleteTeam(index) {
+            if (!requireAdmin()) return;
+            if (confirm('Bu takımı silmek istediğinizden emin misiniz?')) {
+                const teamName = data.teams[index].name;
+                data.teams.splice(index, 1);
+                // Remove related players
+                data.players = data.players.filter(p => p.team !== teamName);
+                // Remove related matches
+                data.matches = data.matches.filter(m => m.home !== teamName && m.away !== teamName);
+                // Remove related fixtures
+                data.fixtures = data.fixtures.filter(f => f.home !== teamName && f.away !== teamName);
+                saveData();
+                renderAll();
+                renderTeamsList();
+            }
+        }
+
+        // Player Manager
+        function openPlayerManager() {
+            if (!requireAdmin()) return;
+            populateTeamSelects();
+            renderPlayersList();
+            document.getElementById('playerManagerModal').classList.add('active');
+        }
+
+        function closePlayerManager() {
+            document.getElementById('playerManagerModal').classList.remove('active');
+        }
+
+        function renderPlayersList() {
+            const html = data.players.map((player, i) => `
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <img src="${player.image}" class="player-image" onerror="this.style.display='none'" alt="${player.name}">
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary);">${player.name}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">${player.team} • ${player.goals} Gol • ${player.assists} Asist</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="deletePlayer(${i})">Sil</button>
+                </div>
+            `).join('');
+            document.getElementById('playersList').innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">👤</div><p>Henüz oyuncu eklenmemiş</p></div>';
+        }
+
+        function addPlayer(event) {
+            event.preventDefault();
+            if (!requireAdmin()) return;
+            const player = {
+                name: document.getElementById('playerName').value,
+                image: document.getElementById('playerImage').value,
+                team: document.getElementById('playerTeam').value,
+                goals: parseInt(document.getElementById('playerGoals').value),
+                assists: parseInt(document.getElementById('playerAssists').value)
+            };
+            
+            data.players.push(player);
+            saveData();
+            renderAll();
+            renderPlayersList();
+            event.target.reset();
+            alert('Oyuncu başarıyla eklendi!');
+        }
+
+        function deletePlayer(index) {
+            if (!requireAdmin()) return;
+            if (confirm('Bu oyuncuyu silmek istediğinizden emin misiniz?')) {
+                data.players.splice(index, 1);
+                saveData();
+                renderAll();
+                renderPlayersList();
+            }
+        }
+
+        // Match Manager
+        function openMatchManager() {
+            if (!requireAdmin()) return;
+            if (data.teams.length < 2) {
+                alert('Maç eklemek için en az 2 takım olmalı!');
+                return;
+            }
+            populateTeamSelects();
+            document.getElementById('matchManagerModal').classList.add('active');
+        }
+
+        function closeMatchManager() {
+            document.getElementById('matchManagerModal').classList.remove('active');
+        }
+
+        function addMatch(event) {
+            event.preventDefault();
+            if (!requireAdmin()) return;
+            const match = {
+                home: document.getElementById('matchHomeTeam').value,
+                away: document.getElementById('matchAwayTeam').value,
+                homeScore: parseInt(document.getElementById('matchHomeScore').value),
+                awayScore: parseInt(document.getElementById('matchAwayScore').value)
+            };
+
+            if (match.home === match.away) {
+                alert('Bir takım kendisiyle oynayamaz!');
+                return;
+            }
+            
+            data.matches.unshift(match);
+            updateTeamStats(match);
+            saveData();
+            renderAll();
+            closeMatchManager();
+            event.target.reset();
+            alert('Maç başarıyla eklendi!');
+        }
+
+        function updateTeamStats(match) {
+            const homeTeam = data.teams.find(t => t.name === match.home);
+            const awayTeam = data.teams.find(t => t.name === match.away);
+            
+            if (homeTeam && awayTeam) {
+                homeTeam.played++;
+                awayTeam.played++;
+                homeTeam.gf += match.homeScore;
+                homeTeam.ga += match.awayScore;
+                awayTeam.gf += match.awayScore;
+                awayTeam.ga += match.homeScore;
+                homeTeam.gd = homeTeam.gf - homeTeam.ga;
+                awayTeam.gd = awayTeam.gf - awayTeam.ga;
+                
+                if (match.homeScore > match.awayScore) {
+                    homeTeam.won++;
+                    awayTeam.lost++;
+                    homeTeam.points += 3;
+                } else if (match.homeScore < match.awayScore) {
+                    awayTeam.won++;
+                    homeTeam.lost++;
+                    awayTeam.points += 3;
+                } else {
+                    homeTeam.drawn++;
+                    awayTeam.drawn++;
+                    homeTeam.points++;
+                    awayTeam.points++;
+                }
+            }
+        }
+
+        // News Manager
+        function openNewsManager() {
+            if (!requireAdmin()) return;
+            document.getElementById('newsManagerModal').classList.add('active');
+        }
+
+        function closeNewsManager() {
+            document.getElementById('newsManagerModal').classList.remove('active');
+        }
+
+        function addNews(event) {
+            event.preventDefault();
+            if (!requireAdmin()) return;
+            const news = {
+                title: document.getElementById('newsTitle').value,
+                content: document.getElementById('newsContent').value,
+                icon: document.getElementById('newsIcon').value || '📰',
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+            
+            data.news.unshift(news);
+            saveData();
+            renderNews();
+            closeNewsManager();
+            event.target.reset();
+            alert('Haber başarıyla eklendi!');
+        }
+
+        function deleteNews(index) {
+            if (!requireAdmin()) return;
+            if (confirm('Bu haberi silmek istediğinizden emin misiniz?')) {
+                data.news.splice(index, 1);
+                saveData();
+                renderNews();
+            }
+        }
+
+        // Transfer Manager
+        function openTransferManager() {
+            if (!requireAdmin()) return;
+            if (data.teams.length === 0) {
+                alert('Transfer eklemek için önce takım eklemelisiniz!');
+                return;
+            }
+            populateTeamSelects();
+            document.getElementById('transferManagerModal').classList.add('active');
+        }
+
+        function closeTransferManager() {
+            document.getElementById('transferManagerModal').classList.remove('active');
+        }
+
+        function addTransfer(event) {
+            event.preventDefault();
+            if (!requireAdmin()) return;
+            const transfer = {
+                player: document.getElementById('transferPlayer').value,
+                team: document.getElementById('transferTeam').value,
+                fee: document.getElementById('transferFee').value
+            };
+            
+            data.transfers.unshift(transfer);
+            saveData();
+            renderTransfers();
+            closeTransferManager();
+            event.target.reset();
+            alert('Transfer başarıyla eklendi!');
+        }
+
+        function deleteTransfer(index) {
+            if (!requireAdmin()) return;
+            if (confirm('Bu transferi silmek istediğinizden emin misiniz?')) {
+                data.transfers.splice(index, 1);
+                saveData();
+                renderTransfers();
+            }
+        }
+
+        // Fixture Manager
+        function openFixtureManager() {
+            if (!requireAdmin()) return;
+            if (data.teams.length < 2) {
+                alert('Fikstür eklemek için en az 2 takım olmalı!');
+                return;
+            }
+            populateTeamSelects();
+            document.getElementById('fixtureManagerModal').classList.add('active');
+        }
+
+        function closeFixtureManager() {
+            document.getElementById('fixtureManagerModal').classList.remove('active');
+        }
+
+        function addFixture(event) {
+            event.preventDefault();
+            if (!requireAdmin()) return;
+            const fixture = {
+                home: document.getElementById('fixtureHomeTeam').value,
+                away: document.getElementById('fixtureAwayTeam').value
+            };
+
+            if (fixture.home === fixture.away) {
+                alert('Bir takım kendisiyle oynayamaz!');
+                return;
+            }
+            
+            data.fixtures.push(fixture);
+            saveData();
+            renderFixtures();
+            closeFixtureManager();
+            event.target.reset();
+            alert('Fikstür başarıyla eklendi!');
+        }
+
+        function deleteFixture(index) {
+            if (!requireAdmin()) return;
+            if (confirm('Bu fikstürü silmek istediğinizden emin misiniz?')) {
+                data.fixtures.splice(index, 1);
+                saveData();
+                renderFixtures();
+            }
+        }
+
+        // Helper Functions
+        function populateTeamSelects() {
+            if (data.teams.length === 0) {
+                const emptyOption = '<option value="">Önce takım ekleyin</option>';
+                document.querySelectorAll('#matchHomeTeam, #matchAwayTeam, #transferTeam, #playerTeam, #fixtureHomeTeam, #fixtureAwayTeam').forEach(select => {
+                    select.innerHTML = emptyOption;
+                });
+                return;
+            }
+
+            const teamOptions = data.teams.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+            document.querySelectorAll('#matchHomeTeam, #matchAwayTeam, #transferTeam, #playerTeam, #fixtureHomeTeam, #fixtureAwayTeam').forEach(select => {
+                select.innerHTML = teamOptions;
+            });
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        console.log('%c⚽ NETROX LEAGUE ⚽', 'color: #0066FF; font-size: 24px; font-weight: bold;');
+        console.log('%cAdmin Giriş Bilgileri:', 'color: #00D9FF; font-size: 14px;');
+        console.log('%cKullanıcı Adı: admin', 'color: #8B92B2; font-size: 12px;');
+        console.log('%cŞifre: netrox2026', 'color: #8B92B2; font-size: 12px;');
+    </script>
+</body>
+</html>
